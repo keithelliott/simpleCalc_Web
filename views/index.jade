@@ -1,0 +1,55 @@
+extends layout
+
+block content
+	div#userLogin.row
+		div.navbar.navbar-inverse.navbar-fixed-top
+			div.navbar-inner
+				div.container
+					button.btn.btn-navbar(type="button", data-toggle="collapse", data-target=".nav-collapse")
+						span.icon-bar
+						span.icon-bar
+						span.icon-bar
+					a.brand(href="/") Simple Calc
+					div.nav-collapse.collapse
+						ul.nav
+							li.active
+								a(href="/") Home
+							li
+								a(href="/demo") Simple Calc
+	div.jumbotron.masthead
+		div.container
+			h1 SimpleCalc
+			p SimpleCalc analyzes your life and helps you find the right house that perfectly fits your lifestyle and budget
+			p 
+				a.btn.btn-primary.btn-large(href="/demo") TestDrive SimpleCalc
+			ul.masthead-links
+				li Version 0.1.5
+	div.bs-docs-social
+		div.container
+			ul.bs-docs-social-buttons
+				li.follow-btn
+					a.twitter-follow-button(href="https://twitter.com/mrkeithelliott", data-show-count="false",data-lang="en") Follow @mrkeithelliott
+					script
+						!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0]
+						if(!d.getElementById(id)){js=d.createElement(s);js.id=id
+						js.src="//platform.twitter.com/widgets.js" 
+						fjs.parentNode.insertBefore(js,fjs) }}
+						(document,"script","twitter-wjs")
+				li.tweet-btn
+					a.twitter-share-button(href="https://twitter.com/share", data-url="https://codemonstr.com", data-via="mrkeithelliott", data-lang="en") Tweet
+					script
+						!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0]
+						if(!d.getElementById(id)){js=d.createElement(s)
+						js.id=id;js.src="https://platform.twitter.com/widgets.js"
+						fjs.parentNode.insertBefore(js,fjs) }}
+						(document,"script","twitter-wjs")
+	div.container
+		div.marketing
+			h1 Introducing SimpleCalc
+			div.row-fluid
+				div.span6
+					h2 For Realtors
+					p Provide high touch service to your clients and prospects.  Our tools will helping you find the houses that make the most sense to visit, by narrowing down the prospect list based on your customers key metrics.  You will be able to provide estimated total cost of ownership using our workflows.  Using our tools, you will provide your clients with peace of mind that they are using their search time effectively to find their dream house.  You're already a star broker and our tools will make you better!
+				div.span6
+					h2 For Home Buyers
+					p Use the right tools to get the most out of your home search.  Start with an affordability analysis to ensure you're looking at houses that fit your budget. Use our location analysis to assess distances to your key destinations.  Run pay-off/paydown scenario to determine the effects of extra payments.

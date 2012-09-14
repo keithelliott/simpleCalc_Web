@@ -1,0 +1,24 @@
+<script type='text/template'>
+	<div id='income_div'>
+		<h3>Income</h3>
+		<form class='form-inline'>
+			<input id='income_name' type='text' placeholder='Name' />
+			<div class='input-prepend input-append'>
+				<span class="add-on">$</span>
+				<input id='income_amount' type='text' placeholder='Monthly Amount' />
+				<span class='add-on'>.00</span>
+			</div>
+			<select id='income_frequency' class='span2'>
+				<option>Monthly</option>
+				<option>Yearly</option>
+			</select>
+			<button id='income_submit' class='btn btn-primary' type='submit'>Add Income</button>
+		</form>
+		<div id='income_table'></div>
+		<div id='income_subtotal'>
+		<table>
+		<tbody><tr><td>Subtotal</td><td id='income_total'>$0.00</td></tr></tbody>
+		</table>
+		</div>
+	</div>
+</script>

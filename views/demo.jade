@@ -1,0 +1,201 @@
+extends layout
+	
+block content
+	header.jumbotron.subhead#overview
+		div.container
+			h1 SimpleCalc
+			p.lead analyzes your life and helps you find the right house that perfectly fits your lifestyle and budgetx
+	div#demo_app.container-fluid
+		div.row-fluid
+			div#demo_menu.navbar.navbar-inverse.navbar-static
+				div.navbar-inner
+					a.brand(href="#") SimpleCalc
+					ul.nav
+						li.active.divider-vertical
+							a#affordability_menu(href="#") Affordability
+						li
+							a#home_search_menu(href="#") Home Search
+						li.divider-vertical
+							a#cost_analysis_menu(href="#") Costs Analysis
+						li
+							a#paydown_menu(href="#") Paydown/Payoff
+	div.container
+		div.row-fluid
+			div#layout-template
+	script#afford_template(type='text/template')
+			div#demo_sidebar.span3.bs-docs-sidebar
+			div#demo_content.span9
+				div.container
+					div.row
+						section#afford_income_input
+					div.row
+						section#afford_expense
+					div.row
+						div.span5
+							section#afford_credit
+						div.span4
+							section#afford_loan
+					div.row
+						section#afford_outputs
+	script#income_list_view(type='text/template')
+		thead
+			tr
+				th.name.span5 Name
+				th.amount.span3 Yearly Amount
+				th.action.span4
+		tbody
+	script#expense_list_view(type='text/template')
+		thead
+			tr
+				th.name.span5 Name
+				th.amount.span3 Monthly Amount
+				th.action.span4
+		tbody
+	script#amort_schedule_view(type='text/template')
+		thead
+			tr
+				th Payment #
+				th Beginning Balance
+				th Total Payment
+				th Interest Payment
+				th Principal Payment
+				th Addtl Principal
+				th Endinging Balance
+		tbody
+	script#amort_row(type='text/template')
+		<td><%= num %></td>
+		<td><%= beginning_bal %></td>
+		<td><%= total_payment %></td>
+		<td><%= interest_payment %></td>
+		<td><%= principal_payment %></td>
+		<td><%= additional_principal %></td>
+		<td><%= ending_bal %></td>
+	script#income_item_view(type='text/template')
+		<td class='name span5'><span><span class='txt_input hide'>
+		<input type='text' class='name_cell' value=<%= name %> /></span>
+		<span class='txt_cell'><%= name %></span></span></td>
+		<td class='amount span3'><span><span class='txt_input hide'>
+		<input type='text' class='input-medium amount_cell' value=<%= amount %> /></span>
+		<span class='txt_cell'><%= amount %></span></span></td>
+		<td class='span4'>
+		<button class='btn btn-danger btn-small income_remove'><i class='icon-trash icon-white'></i> Remove</button>
+		<button class='btn btn-primary btn-small income_edit'><i class='icon-edit icon-white'></i> Edit</button>
+		<button class='btn btn-success btn-small income_edit_done hide'><i class='icon-tasks icon-white'></i> Done</button></td>
+	script#expense_item_view(type='text/template')
+		<td class='name span5'><span><span class='txt_input hide'>
+		<input type='text' class='name_cell' value=<%= name %> /></span>
+		<span class='txt_cell'><%= name %></span></span></td>
+		<td class='amount span3'><span><span class='txt_input hide'>
+		<input type='text' class='input-medium amount_cell' value=<%= amount %> /></span>
+		<span class='txt_cell'><%= amount %></span></span></td>
+		<td class='span4'>
+		<button class='btn btn-danger btn-small expense_remove'><i class='icon-trash icon-white'></i> Remove</button>
+		<button class='btn btn-primary btn-small expense_edit'><i class='icon-edit icon-white'></i> Edit</button>
+		<button class='btn btn-success btn-small expense_edit_done hide'><i class='icon-tasks icon-white'></i> Done</button></td>
+	script#afford_output_tmpl(type='text/template')
+		h3 Outputs
+		table.outputtable.table.table-striped.table-condensed.table-hover.table-bordered
+			thead
+				tr
+					th
+					th Aggressive
+					th Conservative
+			tbody
+				tr
+					td Loan Amount
+					td#afford_aggressive_loan
+					td#afford_conservative_loan
+				tr
+					td Mortgage Payment
+					td#afford_aggressive_pmt
+					td#afford_conservative_pmt
+				tr
+					td Real Estate Taxes
+					td#afford_aggressive_taxes
+					td#afford_conservative_taxes
+				tr
+					td Total Payment
+					td#afford_aggressive_total
+					td#afford_conservative_total
+	script#homeSearch_template(type='text/template')
+		div#demo_sidebar.span3.bs-docs-sidebar
+		div#demo_content.span9
+			div.container
+				div.row
+	script#cost_analysis_template(type='text/template')
+		div#demo_sidebar.span3.bs-docs-sidebar
+			// sidebar content
+	script#paydown_template(type='text/template')
+		div#demo_sidebar.span3.bs-docs-sidebar
+		div.container.span9
+			div.row
+				div.span6
+					section#paydown_inputs
+				div.span6
+					section#paydown_outputs
+			div.row
+				h3 Amortization Schedule
+				div#amortization_table
+	script#affordMenu(type="text/template")
+		ul#afford_nav.nav.bs-docs-sidenav.nav-list.navbar-static
+			li.nav-header Afford
+			li#income_menu.active
+				a(href='#afford_income_input') Income
+					i.icon-chevron-right 
+			li#expense_menu
+				a(href='#afford_expense') Expenses
+					i.icon-chevron-right
+			li#ratio_menu
+				a(href='#afford_credit') Debt Ratios
+					i.icon-chevron-right
+			li#loan_menu
+				a(href='#afford_loan') Loan Assumptions
+					i.icon-chevron-right
+			li#outputs_menu
+				a(href='#afford_outputs') Outputs
+					i.icon-chevron-right
+	script#homeSearchMenu(type='text/template')
+		ul.nav.nav-list.bs-docs-sidenav
+			li.nav-header Home Search
+			li.active 
+				a Search Criteria
+					i.icon-chevron-right
+			li 
+				a Basic Search
+					i.icon-chevron-right
+			li
+				a Recent Searches
+					i.icon-chevron-right
+	script#costAnalysisMenu(type='text/template')
+		ul.nav.nav-list.bs-docs-sidenav
+			li.nav-header Cost Analysis
+			li.active 
+				a Maintenance Analysis
+					i.icon-chevron-right
+			li 
+				a Rent vs Buy Analysis
+					i.icon-chevron-right
+	script#paydownMenu(type='text/template')
+		ul.nav.nav-list.bs-docs-sidenav
+			li.nav-header Paydown/Payoff
+			li.active 
+				a Basic
+					i.icon-chevron-right
+			li 
+				a Scenarios
+					i.icon-chevron-right
+	script#modal(type='text/template')
+		div.modal.hide.fade
+			div.modal-header
+				button.close(type="button", data-dismiss="modal", aria-hidden="true") &times;
+			div.modal-body
+				form.form-inline
+					input#income_name(type='text', placeholder='Name')
+					div.input-prepend.input-append
+						span.add-on $
+						input#income_amount.span8(type='text', placeholder='Yearly Amount')
+						span.add-on .00
+					button#income_submit.btn.btn-primary(type='submit') Add Income
+			div.modal-footer
+				a.btn(href="#") Close
+				a.btn.btn-primary (href="#")Save changes</a>

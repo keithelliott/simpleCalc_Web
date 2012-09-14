@@ -1,0 +1,30 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+a {
+  color: #00b7ff;
+}
+div#demo_content form.form-inline {
+  margin-right: 3px;
+}
+div#income_table {
+  width: 65%;
+}
+div#expense_table {
+  width: 65%;
+}
+.outputtable {
+  width: 65%;
+}
+div#demo_content.span9 div.container {
+  height: 20;
+}
+td span {
+  padding-right: 5;
+}
+#income_subtotal td {
+  font-weight: bold;
+}
+#expense_subtotal td {
+  font-weight: bold;
+}
