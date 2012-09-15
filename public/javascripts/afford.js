@@ -30,7 +30,8 @@ define(['accounting'], function(accounting){
 					
 					var amount = payment / ((rate / 12) / (1 - Math.pow(1 + rate / 12, -12 * term)));
 					return amount;
-				}
+				}				
+				
 		};
 	};
 	
