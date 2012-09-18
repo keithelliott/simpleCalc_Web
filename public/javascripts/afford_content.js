@@ -184,40 +184,38 @@ define([
 				'click #outputs_menu a': 'focus_outputs'
 			},
 			
-			focus_income: function(e){
-				var menu = $('#income_menu');
-				$(menu).siblings().removeClass('active');
+			ui:{
+				income_menu : '#income_menu',
+				expense_menu : '#expense_menu',
+				ratio_menu : '#ratio_menu',
+				loan_menu : '#loan_menu',
+				outputs_menu : '#outputs_menu'
+			},
 			
-				menu.addClass('active');
+			focus_income: function(e){			
+				this.ui.income_menu.siblings().removeClass('active');
+				this.ui.income_menu.addClass('active');
 				return false;
 			},
 			
 			focus_expense: function(e){
-				var menu = $('#expense_menu');
-				$(menu).siblings().removeClass('active');
-				
-				menu.addClass('active');
+				this.ui.expense_menu.siblings().removeClass('active');
+				this.ui.expense_menu.addClass('active');
 				return false;
 			},
 			focus_ratio: function(e){
-				var menu = $('#ratio_menu');
-				$(menu).siblings().removeClass('active');
-				
-				menu.addClass('active');
+				this.ui.ratio_menu.siblings().removeClass('active');
+				this.ui.ratio_menu.addClass('active');
 				return false;
 			},
 			focus_loan: function(e){
-				var menu = $('#loan_menu');
-				$(menu).siblings().removeClass('active');
-				
-				menu.addClass('active');
+				this.ui.loan_menu.siblings().removeClass('active');
+				this.ui.loan_menu.addClass('active');
 				return false;
 			},
 			focus_outputs: function(e){
-				var menu = $('#outputs_menu');
-				$(menu).siblings().removeClass('active');
-				
-				menu.addClass('active');
+				this.ui.outputs_menu.siblings().removeClass('active');
+				this.ui.outputs_menu.addClass('active');
 				return false;
 			}
 		});		
@@ -229,36 +227,44 @@ define([
 				'click #income_submit' : 'addRow',
 				'change #income_name' : 'nameAdded',
 				'change #income_amount' : 'amountAdded',
-				'mouseover #income_div' : 'focus',
 				'change #income_frequency': 'freq_changed'
 			},
 			
-			freq_changed: function(e){
-				$('#income_amount').attr('placeholder',$('select#income_frequency').val() + ' Amount');
+			triggers: {
+				'mouseover #income_div': 'income:focus'
 			},
 			
-			focus: function(e){
-				this.trigger('income:focus');
+			ui: {
+				income_amount: '#income_amount',
+				income_frequency: 'select#income_frequency',
+				income_name : '#income_name',
+				income_submit : '#income_submit'
+			},
+			
+			freq_changed: function(e){
+				this.ui.income_amount.attr('placeholder',this.ui.income_frequency.val() + ' Amount');
 			},
 			
 			nameAdded: function(e){
-				console.log($('#income_name').val() + ' added');
+				console.log(this.ui.income_name.val() + ' added');
 			},
 			
 			amountAdded: function(e){
-				console.log($('#income_amount').val() + ' added');
+				console.log(this.ui.income_amount.val() + ' added');
 			},
 			
 			addRow: function(e){
 				e.preventDefault();
 				console.log('new income added');
-				var amount = parseFloat($('#income_amount').val());
-				if ($('select#income_frequency').val() === 'Monthly'){
+				var amount = parseFloat(this.ui.income_amount.val());
+				if (this.ui.income_frequency.val() === 'Monthly'){
 					amount = amount * 12;
 				} 
-				var income = new Income({'name': $('#income_name').val(),
+				var income = new Income({'name': this.ui.income_name.val(),
 				'amount': accounting.formatMoney(amount)});
 				
+				this.ui.income_name.attr('value','');
+				this.ui.income_amount.attr('value', '');
 				this.collection.add(income);
 			}
 		});
@@ -273,23 +279,31 @@ define([
 			template: '#income_item_view',
 			tagName: 'tr',
 			events: {
-				'click tr:hover button.income_remove' : 'remove',
 				'click tr:hover button.income_edit' : 'edit',
 				'click tr:hover button.income_edit_done': 'done'
 			},
 			
-			remove: function(e){
-				console.log('remove called');
-				this.trigger('remove:model', this.model);
+			ui:{
+				remove_btn: 'tr:hover button.income_remove',
+				edit_btn: 'tr:hover button.income_edit',
+				done_btn: 'tr:hover button.income_edit_done',
+				text_input: 'tr:hover span.txt_input',
+				text_cell: 'tr:hover span.txt_cell',
+				name_cell: 'tr:hover .name_cell',
+				amount_cell: 'tr:hover .amount_cell'
+			},
+			
+			triggers:{
+				'click tr:hover button.income_remove' : 'remove:model'
 			},
 			
 			edit: function(e){
 				e.preventDefault();
 				console.log('edit called');
-				$('tr:hover span.txt_input').removeClass('hide');
-				$('tr:hover span.txt_cell').addClass('hide');
-				$('tr:hover button.income_edit_done').show();
-				$('tr:hover button.income_edit').hide();
+				this.ui.text_input.removeClass('hide');
+				this.ui.text_cell.addClass('hide');
+				this.ui.edit_btn.show();
+				this.ui.done_btn.hide();
 				
 				return false;
 			},
@@ -297,10 +311,10 @@ define([
 			done: function(e){
 				e.preventDefault();
 				console.log('done called');
-				$('tr:hover span.txt_input').addClass('hide');
-				$('tr:hover span.txt_cell').removeClass('hide');
-				$('tr:hover button.income_edit_done').hide();
-				$('tr:hover button.income_edit').show();
+				this.ui.text_input.addClass('hide');
+				this.ui.text_cell.removeClass('hide');
+				this.ui.edit_btn.hide();
+				this.ui.done_btn.show();
 				this.update(e);
 				return false;
 			},
@@ -308,8 +322,8 @@ define([
 			update: function(e){
 				e.preventDefault();
 				console.log('update called');
-				this.model.set({'name': $('tr:hover .name_cell').val(),
-				'amount': accounting.formatMoney($('tr:hover .amount_cell').val()) });
+				this.model.set({'name': this.ui.name_cell.val(),
+				'amount': accounting.formatMoney(this.ui.amount_cell.val()) });
 				this.render();
 			}
 		});
@@ -369,36 +383,44 @@ define([
 					'click #expense_submit' : 'addRow',
 					'change #expense_name' : 'nameAdded',
 					'change #expense_amount' : 'amountAdded',
-					'mouseover #expense_div' : 'focus',
 					'change #expense_frequency': 'freq_changed'
 				},
 				
-				freq_changed: function(e){
-					$('#expense_amount').attr('placeholder',$('select#expense_frequency').val() + ' Amount');
+				ui:{
+					expense_amount: '#expense_amount',
+					expense_frequency: 'select#expense_frequency',
+					expense_name: '#expense_name',
+					expense_amount: '#expense_amount'
 				},
-
-				focus: function(e){
-					this.trigger('expense:focus');
+				
+				triggers:{
+					'mouseover #expense_div' : 'expense:focus'
+				},
+				
+				freq_changed: function(e){
+					this.ui.expense_amount.attr('placeholder',this.ui.expense_frequency.val() + ' Amount');
 				},
 				
 				nameAdded: function(e){
-					console.log($('#expense_name').val() + ' added');
+					console.log(this.ui.expense_name.val() + ' added');
 				},
 
 				amountAdded: function(e){
-					console.log($('#expense_amount').val() + ' added');
+					console.log(this.ui.expense_amount.val() + ' added');
 				},
 
 				addRow: function(e){
 					e.preventDefault();
 					console.log('new expense added');
-					var amount = parseFloat($('#expense_amount').val());
-					if ($('select#expense_frequency').val() === 'Yearly'){
+					var amount = parseFloat(this.ui.expense_amount.val());
+					if (this.ui.expense_frequency.val() === 'Yearly'){
 						amount = amount / 12;
 					} 
-					var expense = new Expense({'name': $('#expense_name').val(),
+					var expense = new Expense({'name': this.ui.expense_name.val(),
 					'amount': accounting.formatMoney(amount)});
 
+					this.ui.expense_name.attr('value','');
+					this.ui.expense_amount.attr('value', '');
 					this.collection.add(expense);
 				}
 			});
@@ -413,41 +435,48 @@ define([
 				template: '#expense_item_view',
 				tagName: 'tr',
 				events: {
-					'click tr:hover button.expense_remove' : 'remove',
 					'click tr:hover button.expense_edit' : 'edit',
-					'click tr:hover button.expense_edit_done': 'done',
-					'change input ': 'update'
+					'click tr:hover button.expense_edit_done': 'done'
 				},
-
-				remove: function(e){
-					console.log('remove called');
-					this.trigger('remove:model', this.model);
+				
+				ui: {
+						remove_btn: 'tr:hover button.expense_remove',
+						edit_btn: 'tr:hover button.expense_edit',
+						done_btn: 'tr:hover button.expense_edit_done',
+						text_input: 'tr:hover span.txt_input',
+						text_cell: 'tr:hover span.txt_cell',
+						name_cell: 'tr:hover .name_cell',
+						amount_cell: 'tr:hover .amount_cell'
+				},
+				
+				triggers:{
+					'click tr:hover button.expense_remove' : 'remove:model'
 				},
 
 				edit: function(e){
 					e.preventDefault();
 					console.log('edit called');
-					$('tr:hover span.txt_input').removeClass('hide');
-					$('tr:hover span.txt_cell').addClass('hide');
-					$('tr:hover button.expense_edit_done').show();
-					$('tr:hover button.expense_edit').hide();
+					this.ui.text_input.removeClass('hide');
+					this.ui.text_cell.addClass('hide');
+					this.ui.done_btn.show();
+					this.ui.edit_btn.hide();
 					return false;
 				},
 				
 				done: function(e){
 					e.preventDefault();
 					console.log('edit called');
-					$('tr:hover span.txt_input').addClass('hide');
-					$('tr:hover span.txt_cell').removeClass('hide');
-					$('tr:hover button.expense_edit_done').hide();
-					$('tr:hover button.expense_edit').show();
+					this.ui.text_input.addClass('hide');
+					this.ui.text_cell.removeClass('hide');
+					this.ui.done_btn.hide();
+					this.ui.edit_btn.show();
 				},
 				
 				update: function(e){
 					e.preventDefault();
 					console.log('update called');
-					this.model.set({'name': $('tr:hover .name_cell').val(),
-					'amount': accounting.formatMoney($('tr:hover .amount_cell').val()) });
+					this.model.set({'name': this.ui.name_cell.val(),
+					'amount': accounting.formatMoney(this.ui.amount_cell.val()) });
 					this.render();
 				}
 			});
@@ -506,21 +535,25 @@ define([
 				
 				events:{
 					'change #d-to-i-conservative' : 'updateDtoIConservative',
-					'change #d-to-i-aggressive' : 'updateDtoIAggressive',
-					'mouseover #ratio_div' : 'focus'
+					'change #d-to-i-aggressive' : 'updateDtoIAggressive'
 				},
 				
-				focus: function(e){
-					this.trigger('ratio:focus');
+				triggers:{
+					'mouseover #ratio_div' : 'ratio:focus'
+				},
+				
+				ui:{
+					d_to_i_conservative: '#d-to-i-conservative',
+					d_to_i_aggressive: '#d-to-i-aggressive'
 				},
 				
 				updateDtoIConservative: function(e){
-					this.model.set({'DebtToIncomeConservative' : $('#d-to-i-conservative').val()});
+					this.model.set({'DebtToIncomeConservative' : this.ui.d_to_i_conservative.val()});
 					console.log('conservative ratio updated to: ' + this.model.get('DebtToIncomeConservative'));
 				},
 				
 				updateDtoIAggressive: function(e){
-					this.model.set({'DebtToIncomeAggressive' : $('#d-to-i-aggressive').val()});
+					this.model.set({'DebtToIncomeAggressive' : this.ui.d_to_i_aggressive.val()});
 					console.log('aggressive ratio updated to:' + this.model.get('DebtToIncomeAggressive'));
 				}
 			});
@@ -534,32 +567,38 @@ define([
 				'change input#interest_rate': 'update_rate',
 				'change input#tax_rate': 'update_tax',
 				'change input#homeowners_amount' : 'update_homeowners',
-				'change input#loan_term' : 'update_term',
-				'mouseover #loan_div': 'focus'
+				'change input#loan_term' : 'update_term'
+			},
+			
+			triggers:{
+				'mouseover #loan_div': 'loan:focus'
+			},
+			
+			ui: {
+				interest_rate: '#interest_rate',
+				loan_term: '#loan_term',
+				tax_rate: '#tax_rate',
+				homeowners: '#homeowners_amount'
 			},
 			
 			update_rate: function(){
-				this.model.set({'interest_rate': $('#interest_rate').val()});
+				this.model.set({'interest_rate': this.ui.interest_rate.val()});
 				console.log('interest rate updated');
 			},
 			
 			update_term: function(){
-				this.model.set({'term': $('#loan_term').val()});
+				this.model.set({'term': this.ui.loan_term.val()});
 				console.log('term updated');
 			},
 			
 			update_tax: function(){
-				this.model.set({'tax_rate': $('#tax_rate').val()});
+				this.model.set({'tax_rate': this.ui.tax_rate.val()});
 				console.log('tax rate updated');
 			},
 			
 			update_homeowners : function(){
-				this.model.set({'homeowners_amount': $('#homeowners_amount').val()});
+				this.model.set({'homeowners_amount': this.ui.homeowners.val()});
 				console.log('homeowners updated');
-			},
-			
-			focus: function(e){
-				this.trigger('loan:focus');
 			}
 		});
 		
@@ -568,36 +607,34 @@ define([
 		var OutputsView = Backbone.Marionette.ItemView.extend({
 			template: '#afford_output_tmpl',
 			
-			initialize: function(options){
-					options.income_list.on('add', this.inputsChanged);
-					options.income_list.on('remove', this.inputsChanged);
-					options.income_list.on('change', this.inputsChanged);
-					options.expense_list.on('add', this.inputsChanged);
-					options.expense_list.on('remove', this.inputsChanged);
-					options.expense_list.on('change', this.inputsChanged);
-					options.debt.on('change', this.inputsChanged);
-					options.loan.on('change', this.inputsChanged);
-					
+			initialize: function(options){					
 					this.bindTo(this.model, 'change', this.display);
+			},
+			
+			ui:{
+				loan_aggressive: '#afford_aggressive_loan',
+				loan_conservative: '#afford_conservative_loan',
+				aggressive_pmt: 'td#afford_aggressive_pmt',
+				conservative_pmt: '#afford_conservative_pmt',
+				aggressive_taxes: '#afford_aggressive_taxes',
+				conservative_taxes: '#afford_conservative_taxes',
+				aggressive_total: '#afford_aggressive_total',
+				conservative_total: '#afford_conservative_total'
 			},
 			
 			display: function(){
 				console.log('outputs displayed');
 
-			  $(this.el).find('#afford_aggressive_loan').html(this.model.get('loan_aggressive'));
-				$(this.el).find('#afford_conservative_loan').html(this.model.get('loan_conservative'));
-			  $(this.el).find('td#afford_aggressive_pmt').html(this.model.get('payment_aggressive'));
-				$(this.el).find('#afford_conservative_pmt').html(this.model.get('payment_conservative'));
-				$(this.el).find('#afford_aggressive_taxes').html(this.model.get('taxes'));
-				$(this.el).find('#afford_conservative_taxes').html(this.model.get('taxes'));
-				$(this.el).find('#afford_aggressive_total').html(this.model.get('total_aggressive'));
-				$(this.el).find('#afford_conservative_total').html(this.model.get('total_conservative'));
+			 	this.ui.loan_aggressive.html(this.model.get('loan_aggressive'));
+				this.ui.loan_conservative.html(this.model.get('loan_conservative'));
+			  this.ui.aggressive_pmt.html(this.model.get('payment_aggressive'));
+				this.ui.conservative_pmt.html(this.model.get('payment_conservative'));
+				this.ui.aggressive_taxes.html(this.model.get('taxes'));
+				this.ui.conservative_taxes.html(this.model.get('taxes'));
+				this.ui.aggressive_total.html(this.model.get('total_aggressive'));
+				this.ui.conservative_total.html(this.model.get('total_conservative'));
 
-			},
-			
-			inputsChanged: function(model, value){
-				console.log('inputs for outputs changed');
-			}		
+			}	
 		});
 			
 		AffordLayout.Sidebar = sidebar;

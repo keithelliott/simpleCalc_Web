@@ -87,12 +87,19 @@ define([
 				'change #paydown_amount': 'inputsChanged'
 			},
 			
+			ui:{
+				loan_amount: '#loan_amount',
+				interest_rate: '#interest_rate',
+				loan_term: '#loan_term',
+				paydown_amount: '#paydown_amount'
+			},
+			
 			inputsChanged: function(){
 				console.log('changes made to inputs');
-				this.model.set('loan_amount' , $(this.el).find('#loan_amount').val());
-				this.model.set('interest_rate' , $(this.el).find('#interest_rate').val());
-				this.model.set('term' , $(this.el).find('#loan_term').val());
-				this.model.set('paydown_amount' , $(this.el).find('#paydown_amount').val());
+				this.model.set('loan_amount' , this.ui.loan_amount.val());
+				this.model.set('interest_rate' , this.ui.interest_rate.val());
+				this.model.set('term' , this.ui.loan_term.val());
+				this.model.set('paydown_amount' , this.ui.paydown_amount.val());
 			}
 		});	
 		
@@ -103,12 +110,21 @@ define([
 			initialize: function(){
 				this.bindTo(this.model,'change', this.outputsChanged);
 			},
+			
+			ui:{
+				current_interest: '#current_interest',
+				proj_interest: '#proj_interest',
+				interest_saved: '#interest_saved',
+				current_payoff_yr: '#current_payoff_yr',
+				proj_payoff_yr: '#proj_payoff_yr'
+			},
+			
 			outputsChanged: function(e){
-				$(this.el).find('#current_interest').html(accounting.formatMoney(this.model.get('current_interest')));
-				$(this.el).find('#proj_interest').html(accounting.formatMoney(this.model.get('proj_interest')));
-				$(this.el).find('#interest_saved').html(accounting.formatMoney(this.model.get('interest_saved')));
-				$(this.el).find('#current_payoff_yr').html(Math.round(this.model.get('current_payoff_yr') * 100)/100);
-				$(this.el).find('#proj_payoff_yr').html(Math.round(this.model.get('proj_payoff_yr') * 100)/100);
+				this.ui.current_interest.html(accounting.formatMoney(this.model.get('current_interest')));
+				this.ui.proj_interest.html(accounting.formatMoney(this.model.get('proj_interest')));
+				this.ui.interest_saved.html(accounting.formatMoney(this.model.get('interest_saved')));
+				this.ui.current_payoff_yr.html(Math.round(this.model.get('current_payoff_yr') * 100)/100);
+				this.ui.proj_payoff_yr.html(Math.round(this.model.get('proj_payoff_yr') * 100)/100);
 			}
 		});	
 		
@@ -129,9 +145,6 @@ define([
 			tagName: 'table',
 			className: 'table table-striped table-condensed table-hover table-bordered',
 			itemView: AmortizationRow,	
-			initialize: function(){
-		
-			},
 			
 			appendHtml: function(collectionView, itemView){
 			    collectionView.$("tbody").append(itemView.el);
